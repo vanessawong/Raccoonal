@@ -1,0 +1,47 @@
+.content{
+    border: solid;
+    height: 88%;
+    display: flex;
+
+    .modal {
+        display: none; /* Hidden by default */
+        z-index: 1; /* Sit on top */
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        text-align: center;
+        
+        
+    }
+
+    .notification {
+        p {
+            padding-top: 30%;
+            padding-bottom: 30%;
+        } 
+    }
+}
+
+.game{
+    /* add background-image */
+
+    .yard{
+        /* temp */
+        text-align: center;
+        display: -webkit-flex;
+        align-items: center;
+        border: solid;
+    }
+
+    #startScanButton {
+        position: fixed;
+        top: 1em;
+        right: 1em;
+    }
+}
+
+.bar {
+    height: 12%;
+    border:solid;
+        
+}

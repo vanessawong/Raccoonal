@@ -1,0 +1,95 @@
+<html>
+<head>
+	<title>Raccoonal Home</title>
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<link rel="stylesheet" href="../css/style.css">
+
+	<!-- JS -->
+	<script src="../js/bootstrap.js"></script>
+	<script src="../js/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+	<div class="content game">
+		<h1 class="yard">
+			Raccoons should be displayed here.<br>
+			Should be interactable.
+		</h1>
+		<button type="button" id="startScanButton">Scan</button>
+		<div class="modal notification" id="startScanDiv">
+			<p>
+				Think about what you did just now <br>
+				Let's scan your face for 10s!
+			</p>
+			<button type="button" id="scanLaterButton">Later</button>
+			<button type="button" id="scanOkButton">OK</button>
+		</div>
+		<div class="modal" id="scanningDiv">
+			<p>Scanning... <span class="secondCountDown" id="5"></span></p>
+			<button type="button" id="scanStopButton">Stop</button>			
+		</div>
+		<div class="modal notification" id="scanResultDiv">
+			<p>Done!<br>
+			Your result is<br>
+			&#9787</p>
+			<input type="text" placeholder="What are you thinking about..." id="resultMemo">
+			<button type="button" id="resultDoneButton">Done</button>
+		</div>
+	</div>
+	<div class="bar">
+		
+	</div>
+
+	<script>
+		var startScan = document.getElementById('startScanDiv');
+		var btn = document.getElementById('startScanButton');
+		var close = document.getElementById('scanLaterButton');
+		var ok = document.getElementById('scanOkButton');
+		var scanning = document.getElementById('scanningDiv');
+		var stop = document.getElementById('scanStopButton');
+		var result = document.getElementById('scanResultDiv');
+		var closeResult = document.getElementById('resultDoneButton');
+		var resultMemo = document.getElementById('resultMemo');
+		btn.onclick = function() {
+			startScan.style.display = "block";
+		}
+		close.onclick = function() {
+			startScan.style.display = "none";
+		}
+		var countdownIntervalId;
+		ok.onclick = function() {
+			startScan.style.display = "none";
+			scanning.style.display = "block";
+			var countdown = function() {
+				var n=$('.secondCountdown').attr('id');
+				var c=n;
+				$('.secondCountdown').text(c+"s left...");
+				countdownIntervalId=setInterval(function(){
+					c--;
+					if(c>=0){
+						$('.secondCountdown').text(c+"s left...");
+					} else {
+						$('.secondCountdown').text("Done!");
+						result.style.display = "block";
+						stop.style.display = "none";
+						clearInterval(countdownIntervalId);	
+					}
+				},1000);
+			}
+			countdown();
+		}
+		stop.onclick = function() {
+			clearInterval(countdownIntervalId);
+			scanning.style.display = "none";
+		}
+		closeResult.onclick = function() {
+			result.style.display = "none";
+			scanning.style.display = "none";
+			stop.style.display = "initial";
+			resultMemo.value = "";
+		}
+	</script>
+
+</body>
+</html>
