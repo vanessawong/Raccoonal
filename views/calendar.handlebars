@@ -1,0 +1,72 @@
+<html>
+<head>
+	<title>Raccoonal Calendar</title>
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<link rel="stylesheet" href="../css/style.css">
+
+	<!-- JS -->
+	<!--<script src="../js/bootstrap.js"></script>-->
+</head>
+<body>
+	<div class="content calendar"> 
+		<div class="calendarBox">
+			<div class="monthBar">
+				<button type="button" id="leftButton">&#8592;</button>
+				<h2 id="monthText">February</h2>
+				<button type="button" id="rightButton">&#8594;</button>				
+			</div>
+			<div class="dateBox">
+				<ul class="weekdays">
+					<li>Mo</li>
+					<li>Tu</li>
+					<li>We</li>
+					<li>Th</li>
+					<li>Fr</li>
+					<li>Sa</li>
+					<li>Su</li>
+				</ul>
+				<div class="alldays">
+					{{#each dates}}
+					<div {{#if today}}class="date today"{{/if}} class="date" id={{id}} onclick="openDiary(this.id)">
+						<p id="dateNumber">{{dateNumber}}</p>
+						<img id="emoji" src="../images/{{image}}">
+
+						<div class='modal notification' id="diary">
+							<p>{{month}}{{dateNumber}}</p>
+							<img id="emoji" src="../images/{{image}}">	
+							<button type="button" id="closeDiaryButton" class="closebtn">Close</button>					
+						</div>
+					</div>
+					{{/each}}
+				</div>
+			</div>
+		</div>
+    </div>
+
+	<div class="bar">
+		<button type="button" class="menu" id="calendarButton" onclick="window.location='calendar.handlebars'">Calendar</button>
+		<button type="button" class="menu" id="bookButton" onclick="window.location='book.handlebars'">Raccoon<br>Book</button>
+		<button type="button" class="menu" id="homeButton" onclick="window.location='home.handlebars'">Yard</button>
+		<button type="button" class="menu" id="emptyButton" disabled> Market<br>Coming Soon!</button>
+		<button type="button" class="menu" id="settingButton" onclick="window.location='setting.handlebars'">Setting</button>
+	</div>
+
+	<script src="../js/jquery-3.3.1.min.js"></script>
+	<script>
+		var diary;
+		function openDiary(id) {
+			diary = $('#'+id).find('#diary');
+			//diary.css('display', 'flex');
+			diary.show().css('display', 'flex');
+		}
+
+		$(".closebtn").on("click",function(e){
+			$(this).parent().hide()
+			e.stopPropagation()
+    	})
+
+	</script>
+</body>
+</html>

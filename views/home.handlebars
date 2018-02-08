@@ -7,8 +7,8 @@
 	<link rel="stylesheet" href="../css/style.css">
 
 	<!-- JS -->
+	<script src="../js/jquery-3.3.1.min.js"></script>	
 	<script src="../js/bootstrap.js"></script>
-	<script src="../js/jquery-3.3.1.min.js"></script>
 </head>
 <body>
 	<div class="content game">
@@ -26,22 +26,33 @@
 			<button type="button" id="scanOkButton">OK</button>
 		</div>
 		<div class="modal" id="scanningDiv">
-			<p>Scanning... <span class="secondCountDown" id="5"></span></p>
+			<p id="countdownMessage">Scanning... </p>
 			<button type="button" id="scanStopButton">Stop</button>			
+			<button type="button" id="toggleButton" class="toggle">Not<br>Centered<br>Test</button>
 		</div>
 		<div class="modal notification" id="scanResultDiv">
 			<p>Done!<br>
 			Your result is<br>
-			&#9787</p>
+			&#9787;</p>
 			<input type="text" placeholder="What are you thinking about..." id="resultMemo">
 			<button type="button" id="resultDoneButton">Done</button>
 		</div>
+		<div class="modal notification" id="sureToLeave">
+			<p>Are you sure you're leaving?</p>
+			<button type="button" id="sureToStayButton">Stay</button>			
+			<button type="button" id="sureToLeaveButton">Leave</button>
+		</div>
 	</div>
 	<div class="bar">
-		
+		<button type="button" class="menu" id="calendarButton" onclick="window.location='calendar.handlebars'">Calendar</button>
+		<button type="button" class="menu" id="bookButton" onclick="window.location='book.handlebars'">Raccoon<br>Book</button>
+		<button type="button" class="menu" id="homeButton" onclick="window.location='home.handlebars'">Yard</button>
+		<button type="button" class="menu" id="emptyButton" disabled>Market<br>Coming Soon!</button>
+		<button type="button" class="menu" id="settingButton" onclick="window.location='setting.handlebars'">Setting</button>
 	</div>
 
 	<script>
+
 		var startScan = document.getElementById('startScanDiv');
 		var btn = document.getElementById('startScanButton');
 		var close = document.getElementById('scanLaterButton');
@@ -51,38 +62,63 @@
 		var result = document.getElementById('scanResultDiv');
 		var closeResult = document.getElementById('resultDoneButton');
 		var resultMemo = document.getElementById('resultMemo');
+		var leaveNote = document.getElementById('sureToLeave');
+		var isScanning = false;
+		
 		btn.onclick = function() {
 			startScan.style.display = "block";
 		}
 		close.onclick = function() {
 			startScan.style.display = "none";
 		}
+
+		//countdown
 		var countdownIntervalId;
-		ok.onclick = function() {
+		var isPaused = false;
+		var offset = 0;	
+		var time;
+		var output = $('#countdownMessage');		
+		ok.onclick = function() {			
 			startScan.style.display = "none";
 			scanning.style.display = "block";
-			var countdown = function() {
-				var n=$('.secondCountdown').attr('id');
-				var c=n;
-				$('.secondCountdown').text(c+"s left...");
-				countdownIntervalId=setInterval(function(){
-					c--;
-					if(c>=0){
-						$('.secondCountdown').text(c+"s left...");
-					} else {
-						$('.secondCountdown').text("Done!");
-						result.style.display = "block";
-						stop.style.display = "none";
-						clearInterval(countdownIntervalId);	
+			time = new Date();
+			var milisec;
+			var remain;
+			countdownIntervalId = setInterval(function() {
+				if (remain < 0) {
+					offset = 0;
+					output.text('Scanning '+ 'Done!' );
+					stop.style.display = "none";
+					result.style.display = "block";
+					clearInterval(countdownIntervalId);
+				} else {
+					if(!isPaused) {
+						milisec = offset + (new Date()).getTime() - time.getTime();
+						remain = 5 - parseInt(milisec / 1000);
+						console.log();
+						output.text('Scanning... '+ remain + 's left...' );
 					}
-				},1000);
-			}
-			countdown();
+				}
+			}, 10);			
 		}
+		$('.toggle').on('click', function(e) {
+			e.preventDefault();
+			isPaused = !isPaused;
+			if (isPaused) {
+				offset += (new Date()).getTime() - time.getTime();
+				output.append('Paused! \n Face not centered!');					
+			} else {
+				time = new Date();
+			}
+		});
 		stop.onclick = function() {
+			isPaused = false;
+			offset = 0;
 			clearInterval(countdownIntervalId);
 			scanning.style.display = "none";
 		}
+
+		
 		closeResult.onclick = function() {
 			result.style.display = "none";
 			scanning.style.display = "none";

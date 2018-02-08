@@ -2,6 +2,8 @@
   border: solid;
   height: 88%;
   display: flex; }
+  .content h1 {
+    width: 100%; }
   .content .modal {
     display: none;
     /* Hidden by default */
@@ -18,6 +20,26 @@
     padding-top: 30%;
     padding-bottom: 30%; }
 
+#sureToLeave {
+  width: 50%;
+  height: 50%;
+  margin: 25%;
+  border: solid;
+  background: white; }
+
+#diary {
+  width: 50%;
+  height: 50%;
+  margin: 25%;
+  border: solid;
+  background: white;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; }
+  #diary img {
+    width: inherit;
+    height: inherit; }
+
 .game {
   /* add background-image */ }
   .game .yard {
@@ -31,6 +53,72 @@
     top: 1em;
     right: 1em; }
 
+.calendar {
+  /* add background-image */
+  padding: 10%; }
+  .calendar .calendarBox {
+    border: solid;
+    text-align: center;
+    width: 98%;
+    padding: 5%; }
+    .calendar .calendarBox .monthBar {
+      display: flex;
+      border: solid;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center; }
+    .calendar .calendarBox .dateBox {
+      border: solid;
+      height: inherit; }
+      .calendar .calendarBox .dateBox ul, .calendar .calendarBox .dateBox li {
+        margin: 0px;
+        padding: 0px;
+        list-style: none; }
+      .calendar .calendarBox .dateBox li {
+        text-align: center;
+        margin-top: 10px;
+        flex: auto; }
+      .calendar .calendarBox .dateBox .weekdays {
+        text-transform: uppercase;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap; }
+      .calendar .calendarBox .dateBox .alldays {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap; }
+        .calendar .calendarBox .dateBox .alldays .date {
+          padding: 5px;
+          flex: auto;
+          width: 14%;
+          height: 12%;
+          margin: 0;
+          padding: 0;
+          border: solid; }
+          .calendar .calendarBox .dateBox .alldays .date img {
+            width: 15px;
+            height: 15px; }
+        .calendar .calendarBox .dateBox .alldays .notThisMonth {
+          background-color: grey; }
+        .calendar .calendarBox .dateBox .alldays .today {
+          background-color: grey; }
+
 .bar {
   height: 12%;
-  border: solid; }
+  border: solid;
+  display: flex; }
+
+.menu {
+  margin: 5px;
+  width: 18%;
+  height: 80%;
+  font-size: small;
+  text-align: center;
+  vertical-align: middle;
+  padding-top: 16px;
+  padding-bottom: 16px; }
+
+#toggleButton {
+  position: fixed;
+  right: 5%;
+  bottom: 17%; }
