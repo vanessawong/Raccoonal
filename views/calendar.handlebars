@@ -42,33 +42,40 @@
 								<li>	
 									<h5>08:00am</h5>
 									<img src="../images/emo_h.png">
-									<button type="button">Memo</button>
+									<button type="button" class='memoBtn'>Memo</button>
 								</li>
 								<li>	
 									<h5>10:20am</h5>
 									<img src="../images/emo_s.png">
-									<button type="button">Memo</button>
+									<button type="button" class='memoBtn'>Memo</button>
 								</li>
 								<li>	
 									<h5>12:60pm</h5>
 									<img src="../images/emo_n.png">
-									<button type="button">Memo</button>
+									<button type="button" class='memoBtn'>Memo</button>
 								</li>
 								<li>	
 									<h5>03:42pm</h5>
 									<img src="../images/emo_h.png">
-									<button type="button">Memo</button>
+									<button type="button" class='memoBtn'>Memo</button>
 								</li>
 								<li>	
 									<h5>08:18pm</h5>
 									<img src="../images/emo_s.png">
-									<button type="button">Memo</button>
+									<button type="button" class='memoBtn'>Memo</button>
 								</li>
 							</ul>
+							
 							<button type="button" id="closeDiaryButton" class="closebtn">Close</button>					
 						</div>
 					</div>
 					{{/each}}
+					<div class="modal notification" id="memo">
+						<p> memomemomemomemomemomemome<br>
+							momemomemomemomemomemomeme<br>
+							omemomemomemo</p>
+						<button type="button" class="closememoBtn">back</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -94,7 +101,18 @@
 		$(".closebtn").on("click",function(e){
 			$(this).parent().hide()
 			e.stopPropagation()
-    	})
+    	});
+
+		$(".memoBtn").on("click",function(e){
+			$('#memo').show();
+			e.stopPropagation();
+		});
+
+		$('.closememoBtn').on("click", function(e) {
+			$('#memo').hide();			
+			e.stopPropagation();			
+		})
+
 
 	</script>
 </body>
