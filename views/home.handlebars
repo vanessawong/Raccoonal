@@ -44,6 +44,7 @@
 				<h4 class="resultMessages" id="numOfFaces"></h4>
 				<h4 class="resultMessages" id="emotionsRes"></h4>
 				<h4 class="resultMessages" id="emojiRes"></h4>
+				<h4 class="resultMessages" id="avgRes"></h4>
 			</div>
 		</div>
 		<div class="modal notification" id="scanResultDiv">
@@ -78,8 +79,8 @@
 
 		//affectiva init
 		var divRoot = $("#affdex_elements")[0];
-		var width = 200;
-		var height = 200;
+		var width = 500;
+		var height = 500;
 
 		var faceMode = affdex.FaceDetectorMode.LARGE_FACES;
 		var detector = new affdex.CameraDetector(divRoot, width, height, faceMode);
@@ -103,6 +104,50 @@
 		var output = $('#countdownMessage');
 		var out2 = $("#notCenteredMessage");
 
+		var resultObj = {
+			"anger": 0.0,
+			"contempt": 0.0,
+			"disgust": 0.0,
+			"fear": 0.0,
+			"joy": 0.0,
+			"sadness": 0.0,
+			"surprise": 0.0,
+			"count": 0,
+		}
+
+		function cleanResult(resultObj) {
+			resultObj["anger"] = 0.0;
+			resultObj["contempt"] = 0.0;
+			resultObj["disgust"] = 0.0;
+			resultObj["fear"] = 0.0;
+			resultObj["joy"] = 0.0;
+			resultObj["sadness"] = 0.0;
+			resultObj["surprise"] = 0.0;
+			resultObj["count"] = 0;
+		}
+
+		function finalizeResult(resultObj) {
+			if (resultObj["count"] == 0) resultObj["count"] = 1;
+			resultObj["anger"] = (resultObj["anger"] / resultObj["count"]);
+			resultObj["contempt"] = (resultObj["contempt"] / resultObj["count"]);
+			resultObj["disgust"] = (resultObj["disgust"] / resultObj["count"]);
+			resultObj["fear"] = (resultObj["fear"] / resultObj["count"]);
+			resultObj["joy"] = (resultObj["joy"] / resultObj["count"]);
+			resultObj["sadness"] = (resultObj["sadness"] / resultObj["count"]);
+			resultObj["surprise"] = (resultObj["surprise"] / resultObj["count"]);
+
+			var overall = resultObj["anger"] + resultObj["contempt"] + resultObj["disgust"] + resultObj["fear"] + resultObj["joy"] + resultObj["sadness"] + resultObj["surprise"];
+			if (overall == 0) overall = 1;
+
+			resultObj["anger"] = (resultObj["anger"] / overall * 100).toFixed(1) + "%";
+			resultObj["contempt"] = (resultObj["contempt"] / overall * 100).toFixed(1) + "%";
+			resultObj["disgust"] = (resultObj["disgust"] / overall * 100).toFixed(1) + "%";
+			resultObj["fear"] = (resultObj["fear"] / overall * 100).toFixed(1) + "%";
+			resultObj["joy"] = (resultObj["joy"] / overall * 100).toFixed(1) + "%";
+			resultObj["sadness"] = (resultObj["sadness"] / overall * 100).toFixed(1) + "%";
+			resultObj["surprise"] = (resultObj["surprise"] / overall * 100).toFixed(1) + "%";
+		}
+
 		var timer = new Timer();
 
 		timer.addEventListener('secondsUpdated', function (e) {
@@ -110,15 +155,19 @@
 		});
 
 		timer.addEventListener('targetAchieved', function (e) {
+			e.preventDefault();
 			detector.stop();
 			timer.stop();
 			output.text("Scanning done!");
+			finalizeResult(resultObj);
+			log('#avgRes', "Emotions in average: " + JSON.stringify(resultObj));
 			$("#scanStopButton").hide();
 			$("#scanResultDiv").show();
 		});
 
 		detector.addEventListener("onInitializeSuccess", function () {
 			$(".affectivaTest").css("visibility", "visible");
+			cleanResult(resultObj);			
 			timer.start({ countdown: true, startValues: { seconds: 5 } });
 		});
 
@@ -129,12 +178,25 @@
 			} else {
 				out2.css("visibility", "hidden");
 				timer.start();
+
+				/* temp testing
 				log('#timeStamp', "Timestamp: " + timestamp.toFixed(2));
 				log('#numOfFace', "Number of faces found: " + faces.length);
 				log('#emotionsRes', "Emotions: " + JSON.stringify(faces[0].emotions, function (key, val) {
 					return val.toFixed ? Number(val.toFixed(0)) : val;
-				}));
+				}));*/
 				log('#emojiRes', "Emoji: " + faces[0].emojis.dominantEmoji);
+
+
+				// collect data into obj
+				resultObj["anger"] += faces[0].emotions.anger;
+				resultObj["contempt"] += faces[0].emotions.contempt;
+				resultObj["disgust"] += faces[0].emotions.disgust;
+				resultObj["fear"] += faces[0].emotions.fear;
+				resultObj["joy"] += faces[0].emotions.joy;
+				resultObj["sadness"] += faces[0].emotions.sadness;
+				resultObj["surprise"] += faces[0].emotions.surprise;
+				resultObj["count"]++;
 			}
 		});
 
@@ -163,6 +225,7 @@
 			$("#scanStopButton").css("display", "initial");
 			$("#resultMemo").val("");
 		});
+
 	</script>
 
 
