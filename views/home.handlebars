@@ -32,6 +32,7 @@
 		</div>
 		<div class="modal" id="scanningDiv">
 			<p id="countdownMessage">Scanning... </p>
+			<p id="notCenteredMessage" style="visibility: hidden">Scanning Paused! Couldn't find your face!</p>
 			<button type="button" id="scanStopButton">Stop</button>
 			<button type="button" id="toggleButton" class="toggle">Not
 				<br>Centered
@@ -39,10 +40,10 @@
 			<div class="affectivaTest" id="affdex_elements"></div>
 			<div id="results">
 				<h3>Results:</h3>
-				<h4 id="timeStamp"></h4>
-				<h4 id="numOfFaces"></h4>
-				<h4 id="emotionsRes"></h4>
-				<h4 id="emojiRes"></h4>
+				<h4 class="resultMessages" id="timeStamp"></h4>
+				<h4 class="resultMessages" id="numOfFaces"></h4>
+				<h4 class="resultMessages" id="emotionsRes"></h4>
+				<h4 class="resultMessages" id="emojiRes"></h4>
 			</div>
 		</div>
 		<div class="modal notification" id="scanResultDiv">
@@ -100,14 +101,17 @@
 		var offset = 0;
 		var time;
 		var output = $('#countdownMessage');
+		var out2 = $("#notCenteredMessage");
 
 		var timer = new Timer();
+
 		timer.addEventListener('secondsUpdated', function (e) {
 			output.text("Scanning... " + timer.getTimeValues().toString() + "s left...");
 		});
 
 		timer.addEventListener('targetAchieved', function (e) {
 			detector.stop();
+			timer.stop();
 			output.text("Scanning done!");
 			$("#scanStopButton").hide();
 			$("#scanResultDiv").show();
@@ -115,11 +119,16 @@
 
 		detector.addEventListener("onInitializeSuccess", function () {
 			$(".affectivaTest").css("visibility", "visible");
-			timer.start({ countdown: true, startValues: { seconds: 5 } });			
+			timer.start({ countdown: true, startValues: { seconds: 5 } });
 		});
 
 		detector.addEventListener("onImageResultsSuccess", function (faces, image, timestamp) {
-			if (faces.length > 0) {
+			if (faces.length <= 0) {
+				timer.pause();
+				out2.css("visibility", "visible");
+			} else {
+				out2.css("visibility", "hidden");
+				timer.start();
 				log('#timeStamp', "Timestamp: " + timestamp.toFixed(2));
 				log('#numOfFace', "Number of faces found: " + faces.length);
 				log('#emotionsRes', "Emotions: " + JSON.stringify(faces[0].emotions, function (key, val) {
@@ -139,14 +148,16 @@
 
 		$("#scanStopButton").on("click", function () {
 			detector.stop();
-			isPaused = false;
-			offset = 0;
-			clearInterval(countdownIntervalId);
+			timer.stop();
+			out2.css("visibility", "hidden");
+			$(".resultMessages").text("");
 			$("#scanningDiv").hide();
 		});
 
 
 		$("#resultDoneButton").on("click", function () {
+			out2.css("visibility", "hidden");
+			$(".resultMessages").text("");
 			$("#scanResultDiv").hide();
 			$("#scanningDiv").hide();
 			$("#scanStopButton").css("display", "initial");
