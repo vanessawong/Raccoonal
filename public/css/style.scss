@@ -193,3 +193,13 @@
     right: 5%;
     bottom: 17%;
 }
+
+.affectivaTest {
+    visibility: hidden;
+}
+
+#results {
+    * {
+        word-wrap: break-word;
+    }
+}

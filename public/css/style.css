@@ -27,6 +27,16 @@
   border: solid;
   background: white; }
 
+#memo {
+  width: 40%;
+  height: 40%;
+  margin: 30%;
+  border: solid;
+  background: grey;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center; }
+
 #diary {
   width: 50%;
   height: 50%;
@@ -138,3 +148,9 @@
   position: fixed;
   right: 5%;
   bottom: 17%; }
+
+.affectivaTest {
+  visibility: hidden; }
+
+#results * {
+  word-wrap: break-word; }

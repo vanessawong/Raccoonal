@@ -1,4 +1,5 @@
 <html>
+
 <head>
 	<title>Raccoonal Home</title>
 
@@ -7,125 +8,153 @@
 	<link rel="stylesheet" href="../css/style.css">
 
 	<!-- JS -->
-	<script src="../js/jquery-3.3.1.min.js"></script>	
+	<script src="../js/jquery-3.3.1.min.js"></script>
 	<script src="../js/bootstrap.js"></script>
+	<script src="https://download.affectiva.com/js/3.1/affdex.js" type="text/javascript"> </script>
+	<script src="../js/easytimer.min.js"></script>
 </head>
+
 <body>
+
 	<div class="content game">
 		<h1 class="yard">
-			Raccoons should be displayed here.<br>
-			Should be interactable.
+			Raccoons should be displayed here.
+			<br> Should be interactable.
 		</h1>
 		<button type="button" id="startScanButton">Scan</button>
 		<div class="modal notification" id="startScanDiv">
 			<p>
-				Think about what you did just now <br>
-				Let's scan your face for 10s!
+				Think about what you did just now
+				<br> Let's scan your face for 10s!
 			</p>
 			<button type="button" id="scanLaterButton">Later</button>
 			<button type="button" id="scanOkButton">OK</button>
 		</div>
 		<div class="modal" id="scanningDiv">
 			<p id="countdownMessage">Scanning... </p>
-			<button type="button" id="scanStopButton">Stop</button>			
-			<button type="button" id="toggleButton" class="toggle">Not<br>Centered<br>Test</button>
+			<button type="button" id="scanStopButton">Stop</button>
+			<button type="button" id="toggleButton" class="toggle">Not
+				<br>Centered
+				<br>Test</button>
+			<div class="affectivaTest" id="affdex_elements"></div>
+			<div id="results">
+				<h3>Results:</h3>
+				<h4 id="timeStamp"></h4>
+				<h4 id="numOfFaces"></h4>
+				<h4 id="emotionsRes"></h4>
+				<h4 id="emojiRes"></h4>
+			</div>
 		</div>
 		<div class="modal notification" id="scanResultDiv">
-			<p>Done!<br>
-			Your result is<br>
-			&#9787;</p>
+			<p>Done!
+				<br> Your result is
+				<br> &#9787;
+			</p>
 			<input type="text" placeholder="What are you thinking about..." id="resultMemo">
 			<button type="button" id="resultDoneButton">Done</button>
 		</div>
 		<div class="modal notification" id="sureToLeave">
 			<p>Are you sure you're leaving?</p>
-			<button type="button" id="sureToStayButton">Stay</button>			
+			<button type="button" id="sureToStayButton">Stay</button>
 			<button type="button" id="sureToLeaveButton">Leave</button>
 		</div>
 	</div>
 	<div class="bar">
 		<button type="button" class="menu" id="calendarButton" onclick="window.location='calendar.handlebars'">Calendar</button>
-		<button type="button" class="menu" id="bookButton" onclick="window.location='book.handlebars'">Raccoon<br>Book</button>
+		<button type="button" class="menu" id="bookButton" onclick="window.location='book.handlebars'">Raccoon
+			<br>Book</button>
 		<button type="button" class="menu" id="homeButton" onclick="window.location='home.handlebars'">Yard</button>
-		<button type="button" class="menu" id="emptyButton" disabled>Market<br>Coming Soon!</button>
+		<button type="button" class="menu" id="emptyButton" disabled>Market
+			<br>Coming Soon!</button>
 		<button type="button" class="menu" id="settingButton" onclick="window.location='setting.handlebars'">Setting</button>
 	</div>
 
+	<!-- work flow-->
 	<script>
+		function log(node_name, msg) {
+			$(node_name).text(msg);
+		}
 
-		var startScan = document.getElementById('startScanDiv');
-		var btn = document.getElementById('startScanButton');
-		var close = document.getElementById('scanLaterButton');
-		var ok = document.getElementById('scanOkButton');
-		var scanning = document.getElementById('scanningDiv');
-		var stop = document.getElementById('scanStopButton');
-		var result = document.getElementById('scanResultDiv');
-		var closeResult = document.getElementById('resultDoneButton');
-		var resultMemo = document.getElementById('resultMemo');
-		var leaveNote = document.getElementById('sureToLeave');
-		var isScanning = false;
-		
-		btn.onclick = function() {
-			startScan.style.display = "block";
-		}
-		close.onclick = function() {
-			startScan.style.display = "none";
-		}
+		//affectiva init
+		var divRoot = $("#affdex_elements")[0];
+		var width = 200;
+		var height = 200;
+
+		var faceMode = affdex.FaceDetectorMode.LARGE_FACES;
+		var detector = new affdex.CameraDetector(divRoot, width, height, faceMode);
+
+		detector.detectAllEmotions();
+		detector.detectAllEmojis();
+
+		$("#startScanButton").on("click", function () {
+			$("#startScanDiv").show();
+		});
+
+		$("#scanLaterButton").on("click", function () {
+			$("#startScanDiv").hide();
+		});
 
 		//countdown
 		var countdownIntervalId;
 		var isPaused = false;
-		var offset = 0;	
+		var offset = 0;
 		var time;
-		var output = $('#countdownMessage');		
-		ok.onclick = function() {			
-			startScan.style.display = "none";
-			scanning.style.display = "block";
-			time = new Date();
-			var milisec;
-			var remain;
-			countdownIntervalId = setInterval(function() {
-				if (remain < 0) {
-					offset = 0;
-					output.text('Scanning '+ 'Done!' );
-					stop.style.display = "none";
-					result.style.display = "block";
-					clearInterval(countdownIntervalId);
-				} else {
-					if(!isPaused) {
-						milisec = offset + (new Date()).getTime() - time.getTime();
-						remain = 5 - parseInt(milisec / 1000);
-						console.log();
-						output.text('Scanning... '+ remain + 's left...' );
-					}
-				}
-			}, 10);			
-		}
-		$('.toggle').on('click', function(e) {
-			e.preventDefault();
-			isPaused = !isPaused;
-			if (isPaused) {
-				offset += (new Date()).getTime() - time.getTime();
-				output.append('Paused! \n Face not centered!');					
-			} else {
-				time = new Date();
+		var output = $('#countdownMessage');
+
+		var timer = new Timer();
+		timer.addEventListener('secondsUpdated', function (e) {
+			output.text("Scanning... " + timer.getTimeValues().toString() + "s left...");
+		});
+
+		timer.addEventListener('targetAchieved', function (e) {
+			detector.stop();
+			output.text("Scanning done!");
+			$("#scanStopButton").hide();
+			$("#scanResultDiv").show();
+		});
+
+		detector.addEventListener("onInitializeSuccess", function () {
+			$(".affectivaTest").css("visibility", "visible");
+			timer.start({ countdown: true, startValues: { seconds: 5 } });			
+		});
+
+		detector.addEventListener("onImageResultsSuccess", function (faces, image, timestamp) {
+			if (faces.length > 0) {
+				log('#timeStamp', "Timestamp: " + timestamp.toFixed(2));
+				log('#numOfFace', "Number of faces found: " + faces.length);
+				log('#emotionsRes', "Emotions: " + JSON.stringify(faces[0].emotions, function (key, val) {
+					return val.toFixed ? Number(val.toFixed(0)) : val;
+				}));
+				log('#emojiRes', "Emoji: " + faces[0].emojis.dominantEmoji);
 			}
 		});
-		stop.onclick = function() {
+
+
+		$("#scanOkButton").on("click", function () {
+			detector.start();
+			$("#startScanDiv").hide();
+			$("#scanningDiv").show();
+			output.text("Initializing emotion Scanner...");
+		});
+
+		$("#scanStopButton").on("click", function () {
+			detector.stop();
 			isPaused = false;
 			offset = 0;
 			clearInterval(countdownIntervalId);
-			scanning.style.display = "none";
-		}
+			$("#scanningDiv").hide();
+		});
 
-		
-		closeResult.onclick = function() {
-			result.style.display = "none";
-			scanning.style.display = "none";
-			stop.style.display = "initial";
-			resultMemo.value = "";
-		}
+
+		$("#resultDoneButton").on("click", function () {
+			$("#scanResultDiv").hide();
+			$("#scanningDiv").hide();
+			$("#scanStopButton").css("display", "initial");
+			$("#resultMemo").val("");
+		});
 	</script>
 
+
 </body>
+
 </html>
