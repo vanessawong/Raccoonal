@@ -7,60 +7,58 @@
 	<link rel="stylesheet" href="../css/bootstrap.min.css">
 	<link rel="stylesheet" href="../css/style.css">
 
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Sniglet" rel="stylesheet">
+
 	<!-- JS -->
 	<script src="../js/jquery-3.3.1.min.js"></script>
 	<script src="../js/bootstrap.js"></script>
 	<script src="https://download.affectiva.com/js/3.1/affdex.js" type="text/javascript"> </script>
 	<script src="../js/easytimer.min.js"></script>
+	<script src="../js/canvasjs.min.js"></script>
 </head>
 
 <body>
-
 	<div class="content game">
 		<h1 class="yard">
 			Raccoons should be displayed here.
 			<br> Should be interactable.
 		</h1>
+
 		<button type="button" id="startScanButton">Scan</button>
-		<div class="modal notification" id="startScanDiv">
-			<p>
-				Think about what you did just now
-				<br> Let's scan your face for 10s!
-			</p>
-			<button type="button" id="scanLaterButton">Later</button>
-			<button type="button" id="scanOkButton">OK</button>
-		</div>
-		<div class="modal" id="scanningDiv">
-			<p id="countdownMessage">Scanning... </p>
-			<p id="notCenteredMessage" style="visibility: hidden">Scanning Paused! Couldn't find your face!</p>
-			<button type="button" id="scanStopButton">Stop</button>
-			<button type="button" id="toggleButton" class="toggle">Not
-				<br>Centered
-				<br>Test</button>
-			<div class="affectivaTest" id="affdex_elements"></div>
-			<div id="results">
-				<h3>Results:</h3>
-				<h4 class="resultMessages" id="timeStamp"></h4>
-				<h4 class="resultMessages" id="numOfFaces"></h4>
-				<h4 class="resultMessages" id="emotionsRes"></h4>
-				<h4 class="resultMessages" id="emojiRes"></h4>
-				<h4 class="resultMessages" id="avgRes"></h4>
+
+		<div class="modal" id="startScanDiv">
+			<div class="modalMessage">
+				<p>
+					Think about what you did just now
+					<br>
+					<br> Let's scan your face for 10s!
+				</p>
+			</div>
+			<div class="modalButton">
+				<button type="button" id="scanLaterButton">Later</button>
+				<button type="button" id="scanOkButton">OK</button>
 			</div>
 		</div>
-		<div class="modal notification" id="scanResultDiv">
-			<p>Done!
-				<br> Your result is
-				<br> &#9787;
-			</p>
+
+		<div class="scanningModal" id="scanningDiv">
+			<p id="countdownMessage">Scanning... </p>
+			<button type="button" id="scanStopButton">Stop</button>
+			<p id="notCenteredMessage">Scanning Paused! Couldn't find your face!</p>
+			<div class="affectivaTest" id="affdex_elements"></div>
+			<button type="button" id="toggleCamButton">
+				<img src="../images/toggle.png" alt="toggle">
+			</button>
+		</div>
+
+		<div class="scanResultModal" id="scanResultDiv">
+			<p>Done!</p>
+			<div id="resultChartContainer"></div>
 			<input type="text" placeholder="What are you thinking about..." id="resultMemo">
 			<button type="button" id="resultDoneButton">Done</button>
 		</div>
-		<div class="modal notification" id="sureToLeave">
-			<p>Are you sure you're leaving?</p>
-			<button type="button" id="sureToStayButton">Stay</button>
-			<button type="button" id="sureToLeaveButton">Leave</button>
-		</div>
 	</div>
+
 	<div class="bar">
 		<button type="button" class="menu" id="calendarButton" onclick="window.location='calendar.handlebars'">Calendar</button>
 		<button type="button" class="menu" id="bookButton" onclick="window.location='book.handlebars'">Raccoon
@@ -79,8 +77,9 @@
 
 		//affectiva init
 		var divRoot = $("#affdex_elements")[0];
-		var width = 500;
-		var height = 500;
+		var width = 640;
+		var height = 480;
+		var isOn = false;
 
 		var faceMode = affdex.FaceDetectorMode.LARGE_FACES;
 		var detector = new affdex.CameraDetector(divRoot, width, height, faceMode);
@@ -89,11 +88,11 @@
 		detector.detectAllEmojis();
 
 		$("#startScanButton").on("click", function () {
-			$("#startScanDiv").show();
+			$("#startScanDiv").fadeIn(100).css("display", "flex");
 		});
 
 		$("#scanLaterButton").on("click", function () {
-			$("#startScanDiv").hide();
+			$("#startScanDiv").fadeOut(100);
 		});
 
 		//countdown
@@ -139,13 +138,13 @@
 			var overall = resultObj["anger"] + resultObj["contempt"] + resultObj["disgust"] + resultObj["fear"] + resultObj["joy"] + resultObj["sadness"] + resultObj["surprise"];
 			if (overall == 0) overall = 1;
 
-			resultObj["anger"] = (resultObj["anger"] / overall * 100).toFixed(1) + "%";
-			resultObj["contempt"] = (resultObj["contempt"] / overall * 100).toFixed(1) + "%";
-			resultObj["disgust"] = (resultObj["disgust"] / overall * 100).toFixed(1) + "%";
-			resultObj["fear"] = (resultObj["fear"] / overall * 100).toFixed(1) + "%";
-			resultObj["joy"] = (resultObj["joy"] / overall * 100).toFixed(1) + "%";
-			resultObj["sadness"] = (resultObj["sadness"] / overall * 100).toFixed(1) + "%";
-			resultObj["surprise"] = (resultObj["surprise"] / overall * 100).toFixed(1) + "%";
+			resultObj["anger"] = (resultObj["anger"] / overall * 100);
+			resultObj["contempt"] = (resultObj["contempt"] / overall * 100);
+			resultObj["disgust"] = (resultObj["disgust"] / overall * 100);
+			resultObj["fear"] = (resultObj["fear"] / overall * 100);
+			resultObj["joy"] = (resultObj["joy"] / overall * 100);
+			resultObj["sadness"] = (resultObj["sadness"] / overall * 100);
+			resultObj["surprise"] = (resultObj["surprise"] / overall * 100);
 		}
 
 		var timer = new Timer();
@@ -158,25 +157,66 @@
 			e.preventDefault();
 			detector.stop();
 			timer.stop();
+			$("#toggleCamButton").fadeOut(100);
+			$("notCenteredMessage").hide();
+			$(".affectivaTest").fadeOut(100);
 			output.text("Scanning done!");
 			finalizeResult(resultObj);
+			console.log(JSON.stringify(resultObj));			
 			log('#avgRes', "Emotions in average: " + JSON.stringify(resultObj));
-			$("#scanStopButton").hide();
-			$("#scanResultDiv").show();
+			$("#scanStopButton").fadeOut(100);
+
+			var chart = new CanvasJS.Chart("resultChartContainer", {
+				theme: "theme2",
+				title: {
+					text: "Your current emotion is"
+				},
+				data: [{
+					type: "pie",
+					indexLableFontSize: 40,
+					backgroundColor: "rgba(255,187,114,0.9)",
+					radius: 100,
+					indexLabel: "{emotion} - {y}",
+					yValueFormatString: "###0.0\"%\"",
+					click: explodePie,
+					dataPoints: [
+						{ y: resultObj["anger"], emotion: "Anger" },
+						{ y: resultObj["contempt"], emotion: "Contempt" },
+						{ y: resultObj["disgust"], emotion: "Disgust" },
+						{ y: resultObj["fear"], emotion: "Fear" },
+						{ y: resultObj["joy"], emotion: "Joy" },
+						{ y: resultObj["sadness"], emotion: "Sadness" },
+						{ y: resultObj["surprise"], emotion: "Surprise" }
+					]
+				}]
+			});
+			chart.render();
+
+			function explodePie(e) {
+				for (var i = 0; i < e.dataSeries.dataPoints.length; i++) {
+					if (i !== e.dataPointIndex)
+						e.dataSeries.dataPoints[i].exploded = false;
+				}
+			}
+
+			$("#scanResultDiv").fadeIn(100).css("display", "flex");
 		});
 
 		detector.addEventListener("onInitializeSuccess", function () {
 			$(".affectivaTest").css("visibility", "visible");
-			cleanResult(resultObj);			
+			$("#toggleCamButton").fadeIn(100);
+			cleanResult(resultObj);
+			$("#notCenteredMessage").fadeOut(100);
+			isOn = false;
 			timer.start({ countdown: true, startValues: { seconds: 5 } });
 		});
 
 		detector.addEventListener("onImageResultsSuccess", function (faces, image, timestamp) {
 			if (faces.length <= 0) {
 				timer.pause();
-				out2.css("visibility", "visible");
+				$("#notCenteredMessage").fadeIn(100);
 			} else {
-				out2.css("visibility", "hidden");
+				$("#notCenteredMessage").fadeOut(100);
 				timer.start();
 
 				/* temp testing
@@ -186,8 +226,6 @@
 					return val.toFixed ? Number(val.toFixed(0)) : val;
 				}));*/
 				log('#emojiRes', "Emoji: " + faces[0].emojis.dominantEmoji);
-
-
 				// collect data into obj
 				resultObj["anger"] += faces[0].emotions.anger;
 				resultObj["contempt"] += faces[0].emotions.contempt;
@@ -203,25 +241,37 @@
 
 		$("#scanOkButton").on("click", function () {
 			detector.start();
-			$("#startScanDiv").hide();
-			$("#scanningDiv").show();
+			$("#startScanDiv").fadeOut(100);
+			$("#scanningDiv").fadeIn(100).css("display", "flex");
+			$("#toggleCamButton").hide();
 			output.text("Initializing emotion Scanner...");
 		});
 
 		$("#scanStopButton").on("click", function () {
 			detector.stop();
 			timer.stop();
-			out2.css("visibility", "hidden");
+			$("#toggleCamButton").fadeOut(100);
+			$(".affectivaTest").fadeOut(100);
+			$("#notCenteredMessage").fadeOut(100);
 			$(".resultMessages").text("");
-			$("#scanningDiv").hide();
+			$("#scanningDiv").fadeOut(100);
 		});
 
+		$("#toggleCamButton").on("click", function () {
+			if (!isOn) {
+				isOn = !isOn;
+				$(".affectivaTest").fadeIn(200);
+			} else {
+				isOn = !isOn;
+				$(".affectivaTest").fadeOut(200);
+			}
+		})
 
 		$("#resultDoneButton").on("click", function () {
-			out2.css("visibility", "hidden");
+			$("#notCenteredMessage").fadeOut(100);
 			$(".resultMessages").text("");
-			$("#scanResultDiv").hide();
-			$("#scanningDiv").hide();
+			$("#scanResultDiv").fadeOut(100);
+			$("#scanningDiv").fadeOut(100);
 			$("#scanStopButton").css("display", "initial");
 			$("#resultMemo").val("");
 		});

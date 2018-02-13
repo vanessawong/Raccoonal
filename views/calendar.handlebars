@@ -1,4 +1,5 @@
 <html>
+
 <head>
 	<title>Raccoonal Calendar</title>
 
@@ -9,13 +10,14 @@
 	<!-- JS -->
 	<!--<script src="../js/bootstrap.js"></script>-->
 </head>
+
 <body>
-	<div class="content calendar"> 
+	<div class="content calendar">
 		<div class="calendarBox">
 			<div class="monthBar">
 				<button type="button" id="leftButton">&#8592;</button>
 				<h2 id="monthText">February</h2>
-				<button type="button" id="rightButton">&#8594;</button>				
+				<button type="button" id="rightButton">&#8594;</button>
 			</div>
 			<div class="dateBox">
 				<ul class="weekdays">
@@ -29,63 +31,39 @@
 				</ul>
 				<div class="alldays">
 					{{#each dates}}
-					<div {{#if today}}class="date today"{{/if}} class="date" id={{id}} onclick="openDiary(this.id)">
+					<div {{#if today}}class="date today" {{/if}} class="date" id={{id}} onclick="openDiary(this.id)">
 						<p id="dateNumber">{{dateNumber}}</p>
 						<img id="emoji" src="../images/{{image}}">
 
 						<div class='modal notification' id="diary">
 							<div class="top">
 								<h5>{{month}}/{{dateNumber}}/2018</h5>
-								<img id="emoji" src="../images/{{image}}">	
+								<img id="emoji" src="../images/{{image}}">
 							</div>
-							<ul class="entrys">
-								<li>	
-									<h5>08:00am</h5>
-									<img src="../images/emo_h.png">
-									<button type="button" class='memoBtn'>Memo</button>
+							<ol>
+								{{#records}}
+								<li>
+									{{time}}:
+									<img id="emoji" src="../images/{{emoji}}">
 								</li>
-								<li>	
-									<h5>10:20am</h5>
-									<img src="../images/emo_s.png">
-									<button type="button" class='memoBtn'>Memo</button>
-								</li>
-								<li>	
-									<h5>12:60pm</h5>
-									<img src="../images/emo_n.png">
-									<button type="button" class='memoBtn'>Memo</button>
-								</li>
-								<li>	
-									<h5>03:42pm</h5>
-									<img src="../images/emo_h.png">
-									<button type="button" class='memoBtn'>Memo</button>
-								</li>
-								<li>	
-									<h5>08:18pm</h5>
-									<img src="../images/emo_s.png">
-									<button type="button" class='memoBtn'>Memo</button>
-								</li>
-							</ul>
-							
-							<button type="button" id="closeDiaryButton" class="closebtn">Close</button>					
+								{{/records}}
+							</ol>
+							<button type="button" id="closeDiaryButton" class="closebtn">Close</button>
 						</div>
 					</div>
 					{{/each}}
-					<div class="modal notification" id="memo">
-						<h5> memomemomemomemomemomemome<br>
-							momemomemomemomemomemomeme<br>
-							omemomemomemo</h5>
-						<button type="button" class="closememoBtn">back</button>
-					</div>
 				</div>
 			</div>
 		</div>
-    </div>
+	</div>
 
 	<div class="bar">
 		<button type="button" class="menu" id="calendarButton" onclick="window.location='calendar.handlebars'">Calendar</button>
-		<button type="button" class="menu" id="bookButton" onclick="window.location='book.handlebars'">Raccoon<br>Book</button>
+		<button type="button" class="menu" id="bookButton" onclick="window.location='book.handlebars'">Raccoon
+			<br>Book</button>
 		<button type="button" class="menu" id="homeButton" onclick="window.location='home.handlebars'">Yard</button>
-		<button type="button" class="menu" id="emptyButton" disabled> Market<br>Coming Soon!</button>
+		<button type="button" class="menu" id="emptyButton" disabled> Market
+			<br>Coming Soon!</button>
 		<button type="button" class="menu" id="settingButton" onclick="window.location='setting.handlebars'">Setting</button>
 	</div>
 
@@ -93,27 +71,28 @@
 	<script>
 		var diary;
 		function openDiary(id) {
-			diary = $('#'+id).find('#diary');
+			diary = $('#' + id).find('#diary');
 			//diary.css('display', 'flex');
 			diary.show().css('display', 'flex');
 		}
 
-		$(".closebtn").on("click",function(e){
+		$(".closebtn").on("click", function (e) {
 			$(this).parent().hide()
 			e.stopPropagation()
-    	});
+		});
 
-		$(".memoBtn").on("click",function(e){
+		$(".memoBtn").on("click", function (e) {
 			$('#memo').show();
 			e.stopPropagation();
 		});
 
-		$('.closememoBtn').on("click", function(e) {
-			$('#memo').hide();			
-			e.stopPropagation();			
+		$('.closememoBtn').on("click", function (e) {
+			$('#memo').hide();
+			e.stopPropagation();
 		})
 
 
 	</script>
 </body>
+
 </html>
