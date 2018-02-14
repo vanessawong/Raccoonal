@@ -7,7 +7,9 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center; }
+  align-items: center;
+  background-image: url("../images/background.png");
+  background-size: 100% auto; }
   .content h1 {
     width: 100%; }
   .content .modal {
@@ -40,7 +42,8 @@ body {
       border-radius: 20px;
       border: solid 3px #76849A;
       font-size: 50px;
-      color: #525863; }
+      color: #525863;
+      background-color: rgba(255, 187, 114, 0.9); }
     .content .modal .modalButton {
       width: 100%;
       height: 15%;
@@ -48,6 +51,7 @@ body {
       padding-top: 5%; }
       .content .modal .modalButton button {
         font-size: 40px;
+        background-color: #E9C8B5;
         height: 80%;
         width: 40%;
         margin-left: 4%;
@@ -58,6 +62,10 @@ body {
         border: solid 3px #76849A;
         color: #525863;
         transition-duration: 0.2s; }
+      .content .modal .modalButton #scanLaterButton:hover {
+        background-color: #FF7F7F; }
+      .content .modal .modalButton #scanOkButton:hover {
+        background-color: #8FFFA9; }
   .content .scanningModal {
     position: fixed;
     border: solid yellow;
@@ -72,7 +80,8 @@ body {
       border-radius: 14px;
       border: solid 3px #76849A;
       font-size: 40px;
-      color: #525863; }
+      color: #525863;
+      background-color: rgba(255, 187, 114, 0.9); }
     .content .scanningModal #scanStopButton {
       margin-top: 4%;
       font-size: 30px;
@@ -84,6 +93,8 @@ body {
       border: solid 2px #76849A;
       color: #525863;
       transition-duration: 0.2s; }
+    .content .scanningModal #scanStopButton:hover {
+      background-color: #FF7F7F; }
     .content .scanningModal #notCenteredMessage {
       display: none;
       font-size: 40px;
@@ -113,6 +124,7 @@ body {
       border: solid 2px #76849A;
       color: #525863;
       transition-duration: 0.2s;
+      background-color: #E9C8B5;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -192,8 +204,6 @@ body {
 .game {
   /* add background-image */
   position: fixed;
-  height: 88%;
-  width: 100%;
   border: solid salmon 10px; }
 
 .calendar {

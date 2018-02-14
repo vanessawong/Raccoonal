@@ -9,7 +9,8 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center; 
-
+    background-image: url("../images/background.png");
+    background-size: 100% auto;
     h1 {
         width: 100%;
     }
@@ -46,7 +47,7 @@ body{
             font-size: 50px;
             color: #525863;
 
-            //background-color: rgba(255,187,114,0.9);
+            background-color: rgba(255,187,114,0.9);
 
         }
         .modalButton{
@@ -56,7 +57,7 @@ body{
             padding-top: 5%;
             button {
                 font-size: 40px;
-                //background-color: #E9C8B5;                
+                background-color: #E9C8B5;                
                 height: 80%;
                 width: 40%;
                 margin-left: 4%;
@@ -70,11 +71,11 @@ body{
             }
 
             #scanLaterButton:hover {
-                //background-color: #FF7F7F;
+                background-color: #FF7F7F;
             }
 
             #scanOkButton:hover {
-                //background-color: #8FFFA9;
+                background-color: #8FFFA9;
             }
         }
     }
@@ -95,7 +96,7 @@ body{
             border: solid 3px #76849A;
             font-size: 40px;
             color: #525863;
-            //background-color: rgba(255,187,114,0.9);
+            background-color: rgba(255,187,114,0.9);
         }
 
         #scanStopButton {
@@ -111,7 +112,7 @@ body{
             transition-duration: 0.2s;
         }
         #scanStopButton:hover {
-            //background-color: #FF7F7F;                
+            background-color: #FF7F7F;                
         }
 
         #notCenteredMessage {
@@ -151,7 +152,7 @@ body{
             border: solid 2px #76849A;
             color:#525863;
             transition-duration: 0.2s;
-            //background-color: #E9C8B5;
+            background-color: #E9C8B5;
 
             display: flex;
             flex-direction: column;
@@ -254,8 +255,6 @@ body{
 .game{
     /* add background-image */
     position: fixed;
-    height: 88%;
-    width: 100%;
     border: solid salmon 10px;
 }
 

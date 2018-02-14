@@ -18,10 +18,10 @@
 	<script src="../js/canvasjs.min.js"></script>
 </head>
 
-<body>
+<body onload="startGame()">
 
-	<canvas class="game">
-		
+	<canvas class="game" id="myGameCanvas">
+
 	</canvas>
 
 	<div class="content">
@@ -177,7 +177,7 @@
 			$(".affectivaTest").fadeOut(100);
 			output.text("Scanning done!");
 			finalizeResult(resultObj);
-			console.log(JSON.stringify(resultObj));			
+			console.log(JSON.stringify(resultObj));
 			log('#avgRes', "Emotions in average: " + JSON.stringify(resultObj));
 			$("#scanStopButton").fadeOut(100);
 
@@ -291,15 +291,86 @@
 			$("#resultMemo").val("");
 		});
 
-		$("#loginButton").on("click", function(e) {
+		$("#loginButton").on("click", function (e) {
 			if ($("#userNameBox").val() == "") {
 				alert("User name can't be empty!");
 			} else if ($("#passwordBox").val() == "") {
-				alert("Password can't be empty!");				
+				alert("Password can't be empty!");
 			} else {
 				$(".login").fadeOut(200);
 			}
 		});
+
+	</script>
+
+	<!-- game -->
+	<script>
+
+		function startGame() {
+			myGameArea.start();
+		}
+
+		var myGameArea = {
+			canvas: $("#myGameCanvas")[0],
+			start: function () {
+				this.canvas.width = 950;
+				this.canvas.height = 1500;
+				this.context = this.canvas.getContext("2d");
+				document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+				this.interval = setInterval(updateGameArea, 20);
+			},
+			clear: function () {
+				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+			}
+		}
+
+		var myGamePiece;
+		function startGame() {
+			myGameArea.start();
+			myGamePiece = new component(300, 200, "../images/Racoons/racoon_default.png", 10, 700, "image");
+		}
+
+		function component(width, height, color, x, y, type) {
+			this.type = type;
+			if (type == "image") {
+				this.image = new Image();
+				this.image.src = color;
+			}
+			this.width = width;
+			this.height = height;
+			this.x = x;
+			this.y = y;
+			this.update = function () {
+				ctx = myGameArea.context;
+				if (type == "image") {
+					ctx.drawImage(this.image,
+						this.x,
+						this.y,
+						this.width, this.height);
+				} else {
+					ctx.fillStyle = color;
+					ctx.fillRect(this.x, this.y, this.width, this.height);
+				}
+			}
+			this.moveToRight = true;
+			this.move = function () {
+				if (this.moveToRight) {
+					this.x+=2;
+				} else {
+					this.x-=2;
+				}
+				if (this.x < 0 | this.x > myGameArea.canvas.width-this.width) {
+					this.moveToRight = !this.moveToRight;
+				}
+			}
+		}
+
+		function updateGameArea() {
+			myGameArea.clear();
+			myGamePiece.move();
+			myGamePiece.update();
+		}
+
 
 	</script>
 
