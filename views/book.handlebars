@@ -11,61 +11,27 @@
 	<script src="../js/jquery-3.3.1.min.js"></script>
 	<meta name= "viewport" content="width=device-width, initial-scale=1">
 <style> 
-{
-	box-sizing: border-box;
-}
-body {
-	/* update paw image and color background later */
-	background-color: #f1f1f1;
-	padding: 20px;
-	/* update font */
-	font-family: Arial; 
-}
-h2 {
-	font-size: 50px;
-	word-break: break-all;
-	text-align: center;
-}
-h3 {
-	text-align: center;
-}
-p{
-	text-align: center;
-}
-.row {
-	margin: 8px-16px;
-}
-.row,
-.row > .column {
-	padding: 8px;
-}
-.column {
-	float: left;
-	width: 25%;
-}
-.row: after {
-	content: "";
-	display: table;
-	clear: both;
-}
-.content {
-	background-color: white;
-	padding: 10px;
-}
 </style>
 </head>
 <body>
-<div class="content book"> 
+<div class="book"> 
 	<h2>Racoon Book</h2>
 	<!-- Photo Grid Layout -->
 	<div class= "row">
 		<div class= "column">
-			<div class= "content">
-			<!--id="profile1" onclick="viewProfile(this.id)"--> 
+			<div class= "content" id="01" onclick="viewProfile(this.id)">
 				<!-- Insert Racoon Photo -->
 				<p>Image of Raccoon</p>
 				<!-- style= "width: 100%-->"
 				<h3>Name</h3>
+				<div class= "profile notification" id= "profile" style= "display: flex;"
+					<div class= "profile picture">
+					<h3> Name </h3>
+					<p> Profile Picture of Racoon </p>
+					<p> Description </p>
+				</div>
+				<button type="button" id="closeProfileButton" class="closebtn">Close
+				</button>
 			</div>
 		</div>
 		<div class= "column">
@@ -104,19 +70,17 @@ p{
 	</div>
 
 <!--Popup Profile-->
-<!--
-<script src=""></script>
+<script src="../js/jquery-3.3.1.min.js"></script>
 <script> 
 	var profile;
 	function viewProfile(id) {
-		profile = $('#' + id).find('#dprofile');
+		profile = $('#' + id).find('#profile');
 		profile.show().css('display', 'flex');
 	}
-	$(".closeButton").on("click",function(e){
+	$(".closebtn").on("click",function(e){
 		$(this).parent().hide()
 		e.stopPropagation()
 	})
 </script>
--->
 </body>
 </html>

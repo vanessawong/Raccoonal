@@ -325,3 +325,49 @@ body {
     font-size: 40px; }
   .login button {
     font-size: 40px; }
+
+  /* Style for Racoon Book */
+.book{
+* {
+  box-sizing: border-box;
+}
+.book body {
+  /* update paw image and color background later */
+  background-color: #f1f1f1;
+  padding: 20px;
+  /* update font */
+  font-family: Arial; 
+}
+.book h2 {
+  font-size: 50px;
+  word-break: break-all;
+  text-align: center;
+}
+.book h3 {
+  text-align: center;
+}
+.book p{
+  text-align: center;
+}
+.book .row {
+  margin: 8px-16px;
+}
+.book .row,
+.book .row > .book .column {
+  padding: 8px;
+}
+.book .column {
+  float: left;
+  width: 25%;
+}
+.book .row: after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.book .content {
+  background-color: white;
+  padding: 10px;
+} 
+}
+
