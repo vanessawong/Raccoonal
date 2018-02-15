@@ -9,11 +9,91 @@
 	<!-- JS -->
 	<!--<script src="../js/bootstrap.js"></script>-->
 	<script src="../js/jquery-3.3.1.min.js"></script>
+	<meta name= "viewport" content="width=device-width, initial-scale=1">
+<style> 
+{
+	box-sizing: border-box;
+}
+body {
+	/* update paw image and color background later */
+	background-color: #f1f1f1;
+	padding: 20px;
+	/* update font */
+	font-family: Arial; 
+}
+h2 {
+	font-size: 50px;
+	word-break: break-all;
+	text-align: center;
+}
+h3 {
+	text-align: center;
+}
+p{
+	text-align: center;
+}
+.row {
+	margin: 8px-16px;
+}
+.row,
+.row > .column {
+	padding: 8px;
+}
+.column {
+	float: left;
+	width: 25%;
+}
+.row: after {
+	content: "";
+	display: table;
+	clear: both;
+}
+.content {
+	background-color: white;
+	padding: 10px;
+}
+</style>
 </head>
 <body>
-	<div class="content book"> 
-        This is book page.
-    </div>
+<div class="content book"> 
+	<h2>Racoon Book</h2>
+	<!-- Photo Grid Layout -->
+	<div class= "row">
+		<div class= "column">
+			<div class= "content">
+			<!--id="profile1" onclick="viewProfile(this.id)"--> 
+				<!-- Insert Racoon Photo -->
+				<p>Image of Raccoon</p>
+				<!-- style= "width: 100%-->"
+				<h3>Name</h3>
+			</div>
+		</div>
+		<div class= "column">
+			<div class= "content">
+				<!-- Insert Mystery Racoon Photo -->
+				<p>???</p>
+				<!-- style= "width: 100%-->"
+				<h3>???</h3>
+			</div>
+		</div>
+		<div class= "column">
+			<div class= "content">
+				<!-- Insert Mystery Racoon Photo -->
+				<p>???</p>
+				<!-- style= "width: 100%-->"
+				<h3>???</h3>
+			</div>
+		</div>
+		<div class= "column">
+			<div class= "content">
+				<!-- Insert Mystery Racoon Photo -->
+				<p>???</p>
+				<!-- style= "width: 100%-->"
+				<h3>???</h3>
+			</div>
+		</div>
+	</div>
+</div>
 
 	<div class="bar">
 		<button type="button" class="menu" id="calendarButton" onclick="window.location='calendar.handlebars'">Calendar</button>
@@ -22,5 +102,21 @@
 		<button type="button" class="menu" id="emptyButton"></button>
 		<button type="button" class="menu" id="settingButton" onclick="window.location='setting.handlebars'">Setting</button>
 	</div>
+
+<!--Popup Profile-->
+<!--
+<script src=""></script>
+<script> 
+	var profile;
+	function viewProfile(id) {
+		profile = $('#' + id).find('#dprofile');
+		profile.show().css('display', 'flex');
+	}
+	$(".closeButton").on("click",function(e){
+		$(this).parent().hide()
+		e.stopPropagation()
+	})
+</script>
+-->
 </body>
 </html>
